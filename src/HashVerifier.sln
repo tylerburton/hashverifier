@@ -1,0 +1,42 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HashVerifier", "HashVerifier\HashVerifier.csproj", "{27EF9094-8795-4878-9BC3-FC9D7390FE5B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{27EF9094-8795-4878-9BC3-FC9D7390FE5B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{27EF9094-8795-4878-9BC3-FC9D7390FE5B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{27EF9094-8795-4878-9BC3-FC9D7390FE5B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{27EF9094-8795-4878-9BC3-FC9D7390FE5B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		description = A graphical utility to generate and verify file hashes
+		version = 0.1.0.0
+		StartupItem = HashVerifier\HashVerifier.csproj
+		Policies = $0
+		$0.DotNetNamingPolicy = $1
+		$1.DirectoryNamespaceAssociation = None
+		$1.ResourceNamePolicy = FileFormatDefault
+		$0.StandardHeader = $2
+		$2.inheritsSet = LGPLv2License
+		$0.TextStylePolicy = $3
+		$3.FileWidth = 120
+		$3.TabWidth = 4
+		$3.TabsToSpaces = False
+		$3.NoTabsAfterNonTabs = False
+		$3.RemoveTrailingWhitespace = True
+		$3.EolMarker = Windows
+		$0.VersionControlPolicy = $4
+		$4.inheritsSet = Mono
+		$0.ChangeLogPolicy = $5
+		$5.UpdateMode = ProjectRoot
+		$5.MessageStyle = $6
+		$6.LineAlign = 0
+		$5.inheritsSet = Mono
+	EndGlobalSection
+EndGlobal
