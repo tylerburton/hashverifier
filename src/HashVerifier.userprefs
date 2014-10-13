@@ -1,17 +1,16 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Release" ctype="Workspace" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" ctype="Workspace" />
   <MonoDevelop.Ide.DebuggingService>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService>
-  <MonoDevelop.Ide.Workbench ActiveDocument="HashVerifier/Properties/AssemblyInfo.cs" ctype="Workbench">
+  <MonoDevelop.Ide.Workbench ActiveDocument="HashVerifier/src/HashVerifier.cs" ctype="Workbench">
     <Files>
-      <File FileName="HashVerifier/src/HashVerifier.cs" Line="27" Column="12" />
-      <File FileName="HashVerifier/Properties/AssemblyInfo.cs" Line="29" Column="12" />
+      <File FileName="HashVerifier/src/HashVerifier.cs" Line="17" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
-        <State expanded="True" selected="True">
-          <Node name="HashVerifier" expanded="True">
+        <State expanded="True">
+          <Node name="HashVerifier" expanded="True" selected="True">
             <Node name="References" expanded="True" />
             <Node name="Properties" expanded="True" />
             <Node name="src" expanded="True" />

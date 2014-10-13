@@ -1,0 +1,291 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>/home/tyler/Projects/HashVerifier/HashVerifier/bin/Release/HashVerifier</name>
+    </assembly>
+    <members>
+        <member name="T:HashVerifier.HashVerifier">
+            <summary>
+            HashVerifier allows you to verify file hashes and compare them to pre-known values
+            </summary>
+        </member>
+        <member name="M:HashVerifier.HashVerifier.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="T:HashVerifier.HashVerifier.HASH_NAME">
+            <summary>
+            The different one-way compression algorithms supported
+            </summary>
+        </member>
+        <member name="M:HashVerifier.HashVerifier.Main">
+            <summary>
+            Static entry point
+            </summary>
+        </member>
+        <member name="M:HashVerifier.HashVerifier.menuStrip_File_SelectFile_Click(System.Object,System.EventArgs)">
+            <summary>
+            Opens a file open dialog window so the user can add a new file
+            </summary>
+            <param name="sender">
+            A <see cref="T:System.Object" />
+            Default sender object
+            </param>
+            <param name="e">
+            A <see cref="T:System.EventArgs" />
+            Default event args
+            </param>
+        </member>
+        <member name="M:HashVerifier.HashVerifier.menuStrip_File_SelectDirectory_Click(System.Object,System.EventArgs)">
+            <summary>
+            Opens a directory open dialog window so the user can add a new directory
+            </summary>
+            <param name="sender">
+            A <see cref="T:System.Object" />
+            Default sender object
+            </param>
+            <param name="e">
+            A <see cref="T:System.EventArgs" />
+            Default event args
+            </param>
+        </member>
+        <member name="M:HashVerifier.HashVerifier.menuStrip_File_Close_Click(System.Object,System.EventArgs)">
+            <summary>
+            Closes the program down
+            </summary>
+            <param name="sender">
+            A <see cref="T:System.Object" />
+            Default object sender
+            </param>
+            <param name="e">
+            A <see cref="T:System.EventArgs" />
+            Default event args
+            </param>
+        </member>
+        <member name="M:HashVerifier.HashVerifier.menuStrip_Export_HashFile_SingleFile_Click(System.Object,System.EventArgs)">
+            <summary>
+            Exports a text file with all of the hashes for the selected file
+            </summary>
+            <param name="sender">
+            A <see cref="T:System.Object" />
+            Default sender object
+            </param>
+            <param name="e">
+            A <see cref="T:System.EventArgs" />
+            Default event arguments
+            </param>
+        </member>
+        <member name="M:HashVerifier.HashVerifier.menuStrip_Export_HashFile_AllFiles_Click(System.Object,System.EventArgs)">
+            <summary>
+            Exports a text file with all of the hashes for all of the files
+            </summary>
+            <param name="sender">
+            A <see cref="T:System.Object" />
+            Default sender object
+            </param>
+            <param name="e">
+            A <see cref="T:System.EventArgs" />
+            Default event arguments
+            </param>
+        </member>
+        <member name="M:HashVerifier.HashVerifier.menuStrip_Help_Help_Click(System.Object,System.EventArgs)">
+            <summary>
+            Start the system browser and load the help file
+            </summary>
+            <param name="sender">
+            A <see cref="T:System.Object" />
+            Default system object
+            </param>
+            <param name="e">
+            A <see cref="T:System.EventArgs" />
+            Default event args
+            </param>
+        </member>
+        <member name="M:HashVerifier.HashVerifier.menuStrip_Help_About_Click(System.Object,System.EventArgs)">
+            <summary>
+            Create an about dialog describing details of the project
+            </summary>
+            <param name="sender">
+            A <see cref="T:System.Object" />
+            Default sender object
+            </param>
+            <param name="e">
+            A <see cref="T:System.EventArgs" />
+            Default event arguments
+            </param>
+        </member>
+        <member name="M:HashVerifier.HashVerifier.lstFileList_DragEnter(System.Object,System.Windows.Forms.DragEventArgs)">
+            <summary>
+            Displays a graphical drag/drop effect
+            </summary>
+            <param name="sender">
+            A <see cref="T:System.Object" />
+            Default object sender
+            </param>
+            <param name="e">
+            A <see cref="T:System.Windows.Forms.DragEventArgs" />
+            The arguments for the drag event
+            </param>
+        </member>
+        <member name="M:HashVerifier.HashVerifier.lstFileList_DragDrop(System.Object,System.Windows.Forms.DragEventArgs)">
+            <summary>
+            Add the drag/dropped files to the listbox
+            </summary>
+            <param name="sender">
+            A <see cref="T:System.Object" />
+            Default object sender
+            </param>
+            <param name="e">
+            A <see cref="T:System.Windows.Forms.DragEventArgs" />
+            The arguments for the drag event
+            </param>
+        </member>
+        <member name="M:HashVerifier.HashVerifier.lstFileList_SelectedIndexChanged(System.Object,System.EventArgs)">
+            <summary>
+            If a file in the list box is selected, display the hash hex string for that file
+            </summary>
+            <param name="sender">
+            A <see cref="T:System.Object" /></param>
+            Default object sender
+            <param name="e">
+            A <see cref="T:System.EventArgs" />
+            Default event args
+            </param></member>
+        <member name="M:HashVerifier.HashVerifier.cboHash_SelectedIndexChanged(System.Object,System.EventArgs)">
+            <summary>
+            If the hash algorithm is changed, display the hash hex string for the currently selected file (if applicable)
+            </summary>
+            <param name="sender">
+            A <see cref="T:System.Object" /></param>
+            Default object sender
+            <param name="e">
+            A <see cref="T:System.EventArgs" />
+            Default event args
+            </param></member>
+        <member name="M:HashVerifier.HashVerifier.txtGenHash_TextChanged(System.Object,System.EventArgs)">
+            <summary>
+            Provide feedback for the user if the hashes match
+            </summary>
+            <param name="sender">
+            A <see cref="T:System.Object" />
+            Default object sender
+            </param>
+            <param name="e">
+            A <see cref="T:System.EventArgs" />
+            Default event args
+            </param>
+        </member>
+        <member name="M:HashVerifier.HashVerifier.txtCheckHash_TextChanged(System.Object,System.EventArgs)">
+            <summary>
+            Provide feedback for the user if the hashes match
+            </summary>
+            <param name="sender">
+            A <see cref="T:System.Object" />
+            Default object sender
+            </param>
+            <param name="e">
+            A <see cref="T:System.EventArgs" />
+            Default event args
+            </param>
+        </member>
+        <member name="M:HashVerifier.HashVerifier.btnCopy_Click(System.Object,System.EventArgs)">
+            <summary>
+            Copy the generated hash to the clipboard
+            </summary>
+            <param name="sender">
+            A <see cref="T:System.Object" />
+            Default sender
+            </param>
+            <param name="e">
+            A <see cref="T:System.EventArgs" />
+            Default event args
+            </param>
+        </member>
+        <member name="M:HashVerifier.HashVerifier.addToFileList(System.String[])">
+            <summary>
+            Adds the file paths to the list box
+            </summary>
+            <param name="filePaths">
+            A <see cref="T:System.String" />
+            The file paths of the list box
+            </param>
+        </member>
+        <member name="M:HashVerifier.HashVerifier.GetSelectedHash">
+            <summary>
+            Returns the enum of the currently selected hash algorithm
+            </summary>
+            <returns>
+            A <see cref="T:HashVerifier.HashVerifier.HASH_NAME" />
+            The currently selected hash algorithm
+            </returns>
+        </member>
+        <member name="M:HashVerifier.HashVerifier.computeHash(HashVerifier.HashVerifier.HASH_NAME,System.String)">
+            <summary>
+            Compute the hash of the given file with the given hash algorithm
+            </summary>
+            <param name="hash">
+            A <see cref="T:HashVerifier.HashVerifier.HASH_NAME" />
+            The hash to use
+            </param>
+            <param name="filePath">
+            A <see cref="T:System.String" />
+            The path to the file to hash
+            </param>
+            <returns>
+            A <see cref="T:System.String" />
+            The hex string of the hash
+            </returns>
+        </member>
+        <member name="M:HashVerifier.HashVerifier.DisplayComputedHash(HashVerifier.HashVerifier.HASH_NAME)">
+            <summary>
+            Computes the hash of the currently selected file and returns its hex string in the txtGenHash text box
+            </summary>
+            <param name="hash">
+            A <see cref="T:HashVerifier.HashVerifier.HASH_NAME" />
+            The hash function to use
+            </param>
+        </member>
+        <member name="M:HashVerifier.HashVerifier.ConvertToHexString(System.Byte[])">
+            <summary>
+            Returns the hexadecimal string conversion of the byte array
+            </summary>
+            <param name="input">
+            A <see cref="T:System.Byte" />
+            The byte array to convert
+            </param>
+            <returns>
+            A <see cref="T:System.String" />
+            The hexadecimal string
+            </returns>
+        </member>
+        <member name="M:HashVerifier.HashVerifier.CompareHashes">
+            <summary>
+            Provide visual feedback to the user if the hashes match
+            </summary>
+        </member>
+        <member name="M:HashVerifier.HashVerifier.writeHashesToFile(HashVerifier.HashVerifier.HASH_NAME[],System.String,System.String[])">
+            <summary>
+            Writes the hash string results of fileToHash of the compression functions to hashFile
+            </summary>
+            <param name="hashes">
+            A <see cref="T:HashVerifier.HashVerifier.HASH_NAME" />
+            The hash algorithms to use
+            </param>
+            <param name="hashFile">
+            A <see cref="T:System.String" />
+            The file to write the hashes to
+            </param>
+            <param name="filesToHash">
+            A <see cref="T:System.String[]" />
+            The file to hash
+            </param>
+        </member>
+        <member name="M:HashVerifier.HashVerifier.InitializeComponent">
+            <summary>
+            Use Windows.Forms to setup the user interface
+            </summary>
+            <remarks>Should only be called once</remarks>
+        </member>
+    </members>
+</doc>

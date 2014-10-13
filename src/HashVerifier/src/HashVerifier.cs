@@ -1,3 +1,20 @@
+//  
+//  Copyright (C) 2009 Tyler Burton
+// 
+//  This program is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU Lesser General Public License as published by
+//  the Free Software Foundation, either version 2.1 of the License, or
+//  (at your option) any later version.
+// 
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+// 
+//  You should have received a copy of the GNU Lesser General Public License
+//  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//
+
 // Import required libraries
 using System;
 using System.Collections;
@@ -13,8 +30,12 @@ namespace HashVerifier
 	/// <summary>
 	/// HashVerifier allows you to verify file hashes and compare them to pre-known values
 	/// </summary>
-	public class HashVerifier : Form
+	public partial class HashVerifier : Form
 	{
+		//Global version number
+		const string _VERSION = "0.2.0.0";
+		
+		
 		//Global UI objects
 		ComboBox cboHash = new ComboBox();
 		Label lblResult = new Label();
@@ -28,11 +49,11 @@ namespace HashVerifier
 		private enum HASH_NAME
 		{
 			MD5 = 0,
-			SHA1 = 1,
-			SHA256 = 2,
-			SHA384 = 3,
-			SHA512 = 4,
-			RIPEMD160 = 5,
+			RIPEMD160 = 1,
+			SHA1 = 2,
+			SHA256 = 3,
+			SHA384 = 4,
+			SHA512 = 5,
 		}
 				
 		/// <summary>
@@ -51,196 +72,338 @@ namespace HashVerifier
 		public HashVerifier()
 		{
 			//create the user interface
-			SetupUI();
-		}
-		
-		/// <summary>
-		/// Use Windows.Forms to setup the user interface
-		/// </summary>
-		/// <remarks>Should only be called once</remarks>
-		private void SetupUI()
-		{
-			/*
-			 * --------------------------
-			 * Define form properties
-			 * --------------------------
-			 */
-			this.BackColor = Color.White;
-			this.DoubleBuffered = true;
-			this.FormBorderStyle = FormBorderStyle.FixedSingle;
-			this.MaximizeBox = false;
-			this.Size = new System.Drawing.Size(645, 258);
-			this.StartPosition = FormStartPosition.CenterScreen;
-			this.Text = "Hash Verifier";
-			
-			/*
-			 * --------------------------
-			 * Define copy to clipboard button
-			 * --------------------------
-			 */
-			Button btnCopy = new Button();
-			btnCopy.FlatStyle = FlatStyle.Flat;
-			btnCopy.Font = new Font("Sans Serif", 8.25f, FontStyle.Regular, GraphicsUnit.Point, 0);
-			btnCopy.Location = new Point(498, 152);
-        	btnCopy.Size = new Size(128, 22);
-        	btnCopy.TabIndex = 3;
-			btnCopy.Text = "Copy Hash";
-        	btnCopy.UseVisualStyleBackColor = true;
-			
-			//setup event handlers
-			btnCopy.Click += new EventHandler(btnCopy_Click);
-			
-			//add button to form
-			this.Controls.Add(btnCopy);
-			
-			/*
-			 * --------------------------
-			 * Define hash selector combo box
-			 * --------------------------
-			 */
-			cboHash.BackColor = Color.White;
-        	cboHash.DropDownStyle = ComboBoxStyle.DropDownList;
-        	cboHash.Font = new Font("Sans Serif", 8.25f, FontStyle.Regular, GraphicsUnit.Point, 0);
-        	cboHash.FormattingEnabled = true;
-        	cboHash.Location = new Point(393, 153);
-        	cboHash.Size = new Size(99, 21);
-        	cboHash.TabIndex = 2;
-			
-			//add combo box options
-			cboHash.Items.Add("MD5");
-			cboHash.Items.Add("RIPEMD-160");
-			cboHash.Items.Add("SHA1");
-			cboHash.Items.Add("SHA256");
-			cboHash.Items.Add("SHA384");
-			cboHash.Items.Add("SHA512");
-			cboHash.SelectedIndex = 0;
-			
-			//setup event handlers
-			cboHash.SelectedIndexChanged += new EventHandler(cboHash_SelectedIndexChanged);
-			
-			//add combo box to form
-			this.Controls.Add(cboHash);
-			
-			/*
-			 * --------------------------
-			 * Define hash to check against information label
-			 * --------------------------
-			 */
-			Label lblCheckHashInfo = new Label();
-			lblCheckHashInfo.Font = new Font("Sans Serif", 8.25f, FontStyle.Regular, GraphicsUnit.Point, 0);
-        	lblCheckHashInfo.Location = new Point(3, 177);
-        	lblCheckHashInfo.Size = new Size(506, 21);
-        	lblCheckHashInfo.Text = "Hash to check against:";
-			
-			//add label to form
-			this.Controls.Add(lblCheckHashInfo);
-			
-			/*
-			 * --------------------------
-			 * Define top drag information label properties
-			 * --------------------------
-			 */
-			Label lblDragInfo = new Label();
-			lblDragInfo.Font = new Font("Sans Serif", 8.25f, FontStyle.Regular, GraphicsUnit.Point, 0);
-        	lblDragInfo.Location = new Point(3, 9);
-        	lblDragInfo.Size = new Size(161, 14);
-        	lblDragInfo.Text = "Drag file(s) into here to begin:";
-			
-			//add label to form
-			this.Controls.Add(lblDragInfo);
-			
-			/*
-			 * --------------------------
-			 * Define generated hash information label
-			 * --------------------------
-			 */
-			Label lblGenHashInfo = new Label();
-			lblGenHashInfo.Font = new Font("Sans Serif", 8.25f, FontStyle.Regular, GraphicsUnit.Point, 0);
-        	lblGenHashInfo.Location = new Point(3, 137);
-        	lblGenHashInfo.Size = new Size(100, 14);
-        	lblGenHashInfo.Text = "Hash produced:";
-			
-			//add label to form
-			this.Controls.Add(lblGenHashInfo);
-			
-			/*
-			 * --------------------------
-			 * Define result label
-			 * --------------------------
-			 */
-			lblResult.Font = new Font("Sans Serif", 8.25f, FontStyle.Regular, GraphicsUnit.Point, 0);
-        	lblResult.ForeColor = Color.White;
-        	lblResult.Location = new Point(518, 194);
-        	lblResult.Size = new Size(108, 21);
-        	lblResult.TextAlign = ContentAlignment.MiddleCenter;
-			
-			//add label to form
-			this.Controls.Add(lblResult);
-			
-			/*
-			 * --------------------------
-			 * Define file list box
-			 * --------------------------
-			 */
-			lstFileList.AllowDrop = true;
-        	lstFileList.Font = new Font("Sans Serif", 8.25f, FontStyle.Regular, GraphicsUnit.Point, 0);
-        	lstFileList.FormattingEnabled = true;
-        	lstFileList.HorizontalScrollbar = true;
-        	lstFileList.Location = new Point(3, 26);
-			lstFileList.ScrollAlwaysVisible = false;
-        	lstFileList.Size = new Size(623, 108);
-			
-			//setup event handlers
-			lstFileList.DragEnter += new DragEventHandler(lstFileList_DragEnter);
-			lstFileList.DragDrop += new DragEventHandler(lstFileList_DragDrop);
-			lstFileList.SelectedIndexChanged += new EventHandler(lstFileList_SelectedIndexChanged);
-			
-			//add list box to form
-			this.Controls.Add(lstFileList);
-			
-			/*
-			 * --------------------------
-			 * Define hash to check against text field
-			 * --------------------------
-			 */
-			txtCheckHash.BackColor = Color.White;
-        	txtCheckHash.Font = new Font("Sans Serif", 8.25f, FontStyle.Regular, GraphicsUnit.Point, 0);
-        	txtCheckHash.Location = new Point(3, 197);
-			txtCheckHash.ReadOnly = false;
-        	txtCheckHash.Size = new Size(506, 21);
-        	txtCheckHash.TabIndex = 0;
-			
-			//setup event handlers
-			txtCheckHash.TextChanged += new EventHandler(txtCheckHash_TextChanged);
-
-			//add button to form
-			this.Controls.Add(txtCheckHash);
-			
-			/*
-			 * --------------------------
-			 * Define generated hash text field
-			 * --------------------------
-			 */
-			txtGenHash.BackColor = Color.White;
-        	txtGenHash.Font = new Font("Sans Serif", 8.25f, FontStyle.Regular, GraphicsUnit.Point, 0);
-        	txtGenHash.Location = new Point(3, 154);
-        	txtGenHash.ReadOnly = true;
-        	txtGenHash.Size = new Size(381, 21);
-        	txtGenHash.TabIndex = 1;
-				
-			//setup event handlers
-			txtGenHash.TextChanged += new EventHandler(txtGenHash_TextChanged);
-			
-			//add button to form
-			this.Controls.Add(txtGenHash);
-			
-		}
+			InitializeComponent();
+		}	
 		
 		/*
 		 * --------------------------
 		 * Event Handlers
 		 * --------------------------
 		*/
+
+		/// <summary>
+		/// Opens a file open dialog window so the user can add a new file
+		/// </summary>
+		/// <param name="sender">
+		/// A <see cref="System.Object"/>
+		/// Default sender object
+		/// </param>
+		/// <param name="e">
+		/// A <see cref="EventArgs"/>
+		/// Default event args
+		/// </param>
+		private void menuStrip_File_SelectFile_Click(object sender, EventArgs e)
+		{
+			//create an initialize dialog
+			OpenFileDialog ofd = new OpenFileDialog();
+			ofd.CheckFileExists = true;
+			ofd.CheckPathExists = true;
+			ofd.Multiselect = true;
+			ofd.Title = "Select file to add to list";
+			
+			//show the dialog
+			ofd.ShowDialog();
+
+			//make sure something was selected
+			if(ofd.FileNames.Length > 0)
+			{
+				//loop through all files
+				for(int i=0;i<ofd.FileNames.Length;i++)
+				{
+					//check if file exists
+					if(File.Exists(ofd.FileNames[i]))
+					   	//add file to list box
+						addToFileList(ofd.FileNames);
+				}
+			}
+		}
+
+		/// <summary>
+		/// Opens a directory open dialog window so the user can add a new directory
+		/// </summary>
+		/// <param name="sender">
+		/// A <see cref="System.Object"/>
+		/// Default sender object
+		/// </param>
+		/// <param name="e">
+		/// A <see cref="EventArgs"/>
+		/// Default event args
+		/// </param>
+		private void menuStrip_File_SelectDirectory_Click(object sender, EventArgs e)
+		{
+			//create an initialize dialog
+			FolderBrowserDialog fbd = new FolderBrowserDialog();
+			fbd.ShowNewFolderButton = false;
+			
+			//show the dialog
+			fbd.ShowDialog();
+
+			if(fbd.SelectedPath.Length > 0)
+			{
+				if(Directory.Exists(fbd.SelectedPath))
+				   {
+					//store all found files from the directory
+					string[] foundFiles = Directory.GetFiles(fbd.SelectedPath,"*",SearchOption.AllDirectories);
+					
+					//add files to list box
+					addToFileList(foundFiles);
+				}
+			}
+		}
+		
+		/// <summary>
+		/// Closes the program down
+		/// </summary>
+		/// <param name="sender">
+		/// A <see cref="System.Object"/>
+		/// Default object sender
+		/// </param>
+		/// <param name="e">
+		/// A <see cref="EventArgs"/>
+		/// Default event args
+		/// </param>
+		private void menuStrip_File_Close_Click(object sender, EventArgs e)
+		{
+			Application.Exit();
+		}
+
+		/// <summary>
+		/// Exports a text file with all of the hashes for the selected file
+		/// </summary>
+		/// <param name="sender">
+		/// A <see cref="System.Object"/>
+		/// Default sender object
+		/// </param>
+		/// <param name="e">
+		/// A <see cref="EventArgs"/>
+		/// Default event arguments
+		/// </param>
+		private void menuStrip_Export_HashFile_SingleFile_Click(object sender, EventArgs e)
+		{
+			if((lstFileList.Items.Count > 0) && (lstFileList.SelectedIndex != -1))
+			{
+				//initialize save file dialog
+				SaveFileDialog sfd = new SaveFileDialog();
+				sfd.AddExtension = true;
+				sfd.CheckPathExists = true;
+				sfd.CreatePrompt = false;
+				sfd.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
+				sfd.SupportMultiDottedExtensions = true;
+				sfd.Title = "Where do you want to save file?";
+	
+				//show the dialog
+				sfd.ShowDialog();
+	
+				//create an array with all hash types
+				HASH_NAME[] all = {HASH_NAME.MD5, HASH_NAME.RIPEMD160, HASH_NAME.SHA1, HASH_NAME.SHA256, HASH_NAME.SHA384, HASH_NAME.SHA512};
+
+				//create a single element array out of selected item
+				string[] temp = {(string)lstFileList.SelectedItem};
+				
+				//call function to write all hashes to file
+				writeHashesToFile(all,sfd.FileName,temp);
+			}else{
+				//display an error message to the user
+				MessageBox.Show("A file must be selected in order to perform an export","Error",MessageBoxButtons.OK);
+			}
+		}
+
+		/// <summary>
+		/// Exports a text file with all of the hashes for all of the files
+		/// </summary>
+		/// <param name="sender">
+		/// A <see cref="System.Object"/>
+		/// Default sender object
+		/// </param>
+		/// <param name="e">
+		/// A <see cref="EventArgs"/>
+		/// Default event arguments
+		/// </param>
+		private void menuStrip_Export_HashFile_AllFiles_Click(object sender, EventArgs e)
+		{
+			if(lstFileList.Items.Count > 0)
+			{
+				//initialize save file dialog
+				SaveFileDialog sfd = new SaveFileDialog();
+				sfd.AddExtension = true;
+				sfd.CheckPathExists = true;
+				sfd.CreatePrompt = false;
+				sfd.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
+				sfd.SupportMultiDottedExtensions = true;
+				sfd.Title = "Where do you want to save file?";
+	
+				//show the dialog
+				sfd.ShowDialog();
+	
+				//create an array with all hash types
+				HASH_NAME[] all = {HASH_NAME.MD5, HASH_NAME.RIPEMD160, HASH_NAME.SHA1, HASH_NAME.SHA256, HASH_NAME.SHA384, HASH_NAME.SHA512};
+
+				//create an array for all files
+				string[] temp = new string[lstFileList.Items.Count];
+
+				//because C# doesn't support Items.Item(index) we need to get crafty
+				int i = 0;
+				//loop through all object in list box
+				foreach(object itm in lstFileList.Items)
+				{
+					//store string in array
+					temp[i] = (string)itm;
+					i++;
+				}
+			
+				//call function to write all hashes to file
+				writeHashesToFile(all,sfd.FileName,temp);
+			}else{
+				//display an error message to the user
+				MessageBox.Show("There must be files in the list in order to perform an export","Error",MessageBoxButtons.OK);
+			}
+		}
+
+		/// <summary>
+		/// Start the system browser and load the help file
+		/// </summary>
+		/// <param name="sender">
+		/// A <see cref="System.Object"/>
+		/// Default system object
+		/// </param>
+		/// <param name="e">
+		/// A <see cref="EventArgs"/>
+		/// Default event args
+		/// </param>
+		private void menuStrip_Help_Help_Click(object sender, EventArgs e)
+		{
+			//check if file exists
+			if(File.Exists(Path.GetDirectoryName(Application.ExecutablePath) + "/help.htm"))
+			{
+				try
+				{
+					//start system browser to load help file
+					System.Diagnostics.Process.Start(Path.GetDirectoryName(Application.ExecutablePath) + "/help.htm");
+				}
+				catch(Exception)
+				{
+					//display error message
+					MessageBox.Show("Could not start default browser","Error",MessageBoxButtons.OK);
+				}
+			}else
+				//display error message
+				MessageBox.Show("Could not find help file at: " + Path.GetDirectoryName(Application.ExecutablePath) + "/help.htm","Error",MessageBoxButtons.OK);
+		}
+
+		/// <summary>
+		/// Create an about dialog describing details of the project
+		/// </summary>
+		/// <param name="sender">
+		/// A <see cref="System.Object"/>
+		/// Default sender object
+		/// </param>
+		/// <param name="e">
+		/// A <see cref="EventArgs"/>
+		/// Default event arguments
+		/// </param>
+		private void menuStrip_Help_About_Click(object sender, EventArgs e)
+		{
+			//create about form and initialize its settings
+			Form frmAbout = new Form();
+			frmAbout.BackColor = Color.White;
+			frmAbout.FormBorderStyle = FormBorderStyle.FixedSingle;
+			frmAbout.MaximizeBox = false;
+			frmAbout.MinimizeBox = false;
+			frmAbout.Size = new Size(450,145);
+			frmAbout.StartPosition = FormStartPosition.CenterParent;
+			frmAbout.Text = "About Hash Verifier";
+
+			//create its layout engine and apply it to the dialog
+			TableLayoutPanel tlp = new TableLayoutPanel();
+			tlp.BorderStyle = BorderStyle.FixedSingle;
+			tlp.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
+			tlp.ColumnCount = 2;
+			tlp.Dock = DockStyle.Fill;
+			tlp.GrowStyle = TableLayoutPanelGrowStyle.AddRows;
+			tlp.RowCount = 6;
+			
+			//Create the first half of the very top label
+			Label lblTopLabel1 = new Label();
+			lblTopLabel1.Font = new Font("Sans Serif", 12f, FontStyle.Bold, GraphicsUnit.Point, 0);
+			lblTopLabel1.Text = "Hash ";
+			lblTopLabel1.TextAlign = ContentAlignment.MiddleRight;
+
+			//Create the second half of the very top label
+			Label lblTopLabel2 = new Label();
+			lblTopLabel2.Font = new Font("Sans Serif", 12f, FontStyle.Bold, GraphicsUnit.Point, 0);
+			lblTopLabel2.Text = "Verifier";
+			lblTopLabel2.TextAlign = ContentAlignment.MiddleLeft;
+
+			//Create the version info label
+			Label lblVersionText = new Label();
+			lblVersionText.Font = new Font("Sans Serif", 12f, FontStyle.Regular, GraphicsUnit.Point, 0);
+			lblVersionText.Text = "Version: ";
+			lblVersionText.Width = 100;
+
+			//Create the version details label
+			Label lblVersionNumber = new Label();
+			lblVersionNumber.Font = new Font("Sans Serif", 12f, FontStyle.Regular, GraphicsUnit.Point, 0);
+			lblVersionNumber.Text = _VERSION;
+			lblVersionNumber.TextAlign = ContentAlignment.MiddleCenter;
+			lblVersionNumber.Width = 300;
+
+			//Create the license info label
+			Label lblLicenseText = new Label();
+			lblLicenseText.Font = new Font("Sans Serif", 12f, FontStyle.Regular, GraphicsUnit.Point, 0);
+			lblLicenseText.Text = "License: ";
+			lblLicenseText.Width = 100;
+
+			//Create the license details label
+			Label lblLicenseInfo = new Label();
+			lblLicenseInfo.Font = new Font("Sans Serif", 8.25f, FontStyle.Regular, GraphicsUnit.Point, 0);
+			lblLicenseInfo.Text = "Released under the GNU Lesser General Public License (LGPL)";
+			lblLicenseInfo.TextAlign = ContentAlignment.MiddleCenter;
+			lblLicenseInfo.Width = 300;
+			
+			//Create the copyright info label
+			Label lblCopyrightText = new Label();
+			lblCopyrightText.Font = new Font("Sans Serif", 12f, FontStyle.Regular, GraphicsUnit.Point, 0);
+			lblCopyrightText.Text = "Copyright: ";
+			lblCopyrightText.Width = 100;
+
+			//Create the copyright details label
+			Label lblCopyrightInfo = new Label();
+			lblCopyrightInfo.Font = new Font("Sans Serif", 8.25f, FontStyle.Regular, GraphicsUnit.Point, 0);
+			lblCopyrightInfo.Text = "2009 Tyler Burton";
+			lblCopyrightInfo.TextAlign = ContentAlignment.MiddleCenter;
+			lblCopyrightInfo.Width = 300;
+
+			//Create the contact info label
+			Label lblContactText = new Label();
+			lblContactText.Font = new Font("Sans Serif", 12f, FontStyle.Regular, GraphicsUnit.Point, 0);
+			lblContactText.Text = "Contact: ";
+			lblContactText.Width = 100;
+
+			//Create the contact details label
+			Label lblContactInfo = new Label();
+			lblContactInfo.Font = new Font("Sans Serif", 8.25f, FontStyle.Regular, GraphicsUnit.Point, 0);
+			lblContactInfo.Text = "software@tylerburton.ca";
+			lblContactInfo.TextAlign = ContentAlignment.MiddleCenter;
+			lblContactInfo.Width = 300;
+
+			//Add the labels to the layout engine control
+			tlp.Controls.Add(lblTopLabel1);
+			tlp.Controls.Add(lblTopLabel2);
+			tlp.Controls.Add(lblVersionText);
+			tlp.Controls.Add(lblVersionNumber);
+			tlp.Controls.Add(lblLicenseText);
+			tlp.Controls.Add(lblLicenseInfo);
+			tlp.Controls.Add(lblCopyrightText);
+			tlp.Controls.Add(lblCopyrightInfo);
+			tlp.Controls.Add(lblContactText);
+			tlp.Controls.Add(lblContactInfo);
+
+			//Add the layout engine control to the dialog
+			frmAbout.Controls.Add(tlp);
+
+			//show the form as a dialog
+			frmAbout.ShowDialog();
+		}
 		
 		/// <summary>
 		/// Displays a graphical drag/drop effect
@@ -288,8 +451,12 @@ namespace HashVerifier
 					//check to make sure file still exists
 					if(File.Exists(droppedFiles[i]))
 					{
+						//create a single element array to hold the value
+						string[] temp = new string[1];
+						temp[0] = droppedFiles[i];
+						
 						//add files to list box
-						lstFileList.Items.Add(droppedFiles[i]);
+						addToFileList(temp);
 					}
 					//in the case of a directory we need to search its sub-directories and return all found files
 					else if(Directory.Exists(droppedFiles[i]))
@@ -298,7 +465,7 @@ namespace HashVerifier
 						string[] foundFiles = Directory.GetFiles(droppedFiles[i],"*",SearchOption.AllDirectories);
 						
 						//add files to list box
-						lstFileList.Items.AddRange(foundFiles);
+						addToFileList(foundFiles);
 					}
 				}
 			}
@@ -403,6 +570,19 @@ namespace HashVerifier
 		*/
 		
 		/// <summary>
+		/// Adds the file paths to the list box
+		/// </summary>
+		/// <param name="filePaths">
+		/// A <see cref="System.String"/>
+		/// The file paths of the list box
+		/// </param>
+		private void addToFileList(string[] filePaths)
+		{
+			//add files to list 
+			lstFileList.Items.AddRange(filePaths);
+		}
+		
+		/// <summary>
 		/// Returns the enum of the currently selected hash algorithm
 		/// </summary>
 		/// <returns>
@@ -436,6 +616,89 @@ namespace HashVerifier
 				
 			}
 		}
+
+		/// <summary>
+		/// Compute the hash of the given file with the given hash algorithm
+		/// </summary>
+		/// <param name="hash">
+		/// A <see cref="HASH_NAME"/>
+		/// The hash to use
+		/// </param>
+		/// <param name="filePath">
+		/// A <see cref="System.String"/>
+		/// The path to the file to hash
+		/// </param>
+		/// <returns>
+		/// A <see cref="System.String"/>
+		/// The hex string of the hash
+		/// </returns>
+		private string computeHash(HASH_NAME hash, string filePath)
+		{
+			//check to make sure file exists
+			if(File.Exists(filePath))
+			{
+				//create an inputstream for file i/o
+				FileStream inputStream = null;
+				
+				try
+				{
+					//try and create a file stream around the file
+					inputStream = new FileStream(filePath,FileMode.Open,FileAccess.Read);					
+				
+					//switch on the hash being used
+					switch (hash)
+					{
+						case HASH_NAME.MD5:
+							MD5CryptoServiceProvider MD5HashFunction = new MD5CryptoServiceProvider();
+							return ConvertToHexString(MD5HashFunction.ComputeHash(inputStream));	
+							
+						case HASH_NAME.RIPEMD160:
+							RIPEMD160Managed RIPEMD160HashFunction = new RIPEMD160Managed();
+							return ConvertToHexString(RIPEMD160HashFunction.ComputeHash(inputStream));
+							
+						case HASH_NAME.SHA1:
+							SHA1Managed SHA1HashFunction = new SHA1Managed();
+							return ConvertToHexString(SHA1HashFunction.ComputeHash(inputStream));	
+							
+						case HASH_NAME.SHA256:
+							SHA256Managed SHA256HashFunction = new SHA256Managed();
+							return ConvertToHexString(SHA256HashFunction.ComputeHash(inputStream));	
+						
+						case HASH_NAME.SHA384:
+							SHA384Managed SHA384HashFunction = new SHA384Managed();
+							return ConvertToHexString(SHA384HashFunction.ComputeHash(inputStream));	
+						
+						case HASH_NAME.SHA512:
+							SHA512Managed SHA512HashFunction = new SHA512Managed();
+							return ConvertToHexString(SHA512HashFunction.ComputeHash(inputStream));
+							
+						default:
+							//show error message
+							MessageBox.Show("Invalid hash selection","Error!",MessageBoxButtons.OK);
+							
+							//return nothing
+							return "";
+					}
+				}
+				catch(IOException)
+				{
+					//show error message
+					MessageBox.Show("Cannot open file for reading. Do you have permission to do so?","Error",MessageBoxButtons.OK);
+	
+					//return nothing
+					return "";
+				}
+				catch(Exception)
+				{
+					//general error message
+					MessageBox.Show("An error has occured!","Error",MessageBoxButtons.OK);
+					
+					//return nothing
+					return "";
+				}
+			}else
+				return "";
+		}
 		
 		/// <summary>
 		/// Computes the hash of the currently selected file and returns its hex string in the txtGenHash text box
@@ -452,64 +715,9 @@ namespace HashVerifier
 			{	
 				//extract selected file path
 				string filePath = (string)lstFileList.SelectedItem;
-				
-				//make sure the file still exists
-				if(File.Exists(filePath))
-				{
-					//create an inputstream for file i/o
-					FileStream inputStream = null;
-					
-					try
-					{
-						//try and create a file stream around the file
-						inputStream = new FileStream(filePath,FileMode.Open,FileAccess.Read);
-					}
-					catch(Exception)
-					{
-						//show error message
-						MessageBox.Show("Cannot open file for reading. Do you have permission to do so?","Error",MessageBoxButtons.OK);
-					}					
-					
-					//switch on the hash being used
-					switch (hash)
-					{
-						case HASH_NAME.MD5:
-							MD5CryptoServiceProvider MD5HashFunction = new MD5CryptoServiceProvider();
-							txtGenHash.Text = ConvertToHexString(MD5HashFunction.ComputeHash(inputStream));	
-							break;
-							
-						case HASH_NAME.RIPEMD160:
-							RIPEMD160Managed RIPEMD160HashFunction = new RIPEMD160Managed();
-							txtGenHash.Text = ConvertToHexString(RIPEMD160HashFunction.ComputeHash(inputStream));
-							break;
-							
-						case HASH_NAME.SHA1:
-							SHA1Managed SHA1HashFunction = new SHA1Managed();
-							txtGenHash.Text = ConvertToHexString(SHA1HashFunction.ComputeHash(inputStream));	
-							break;
-							
-						case HASH_NAME.SHA256:
-							SHA256Managed SHA256HashFunction = new SHA256Managed();
-							txtGenHash.Text = ConvertToHexString(SHA256HashFunction.ComputeHash(inputStream));	
-							break;
-						
-						case HASH_NAME.SHA384:
-							SHA384Managed SHA384HashFunction = new SHA384Managed();
-							txtGenHash.Text = ConvertToHexString(SHA384HashFunction.ComputeHash(inputStream));	
-							break;
-						
-						case HASH_NAME.SHA512:
-							SHA512Managed SHA512HashFunction = new SHA512Managed();
-							txtGenHash.Text = ConvertToHexString(SHA512HashFunction.ComputeHash(inputStream));	
-							break;
-							
-						default:
-							MessageBox.Show("Invalid hash selection","Error!",MessageBoxButtons.OK);
-							break;
-					}
-				}else
-					//Show error message
-					MessageBox.Show("File not found. Was it moved or deleted?","Error",MessageBoxButtons.OK);
+			
+				//compute hash and show result
+				txtGenHash.Text = computeHash(hash,filePath);
 			}	
 				
 		}
@@ -563,7 +771,100 @@ namespace HashVerifier
 				lblResult.BackColor = Color.White;
 			}
 		}
-		
-	}
-}
 
+		/// <summary>
+		/// Writes the hash string results of fileToHash of the compression functions to hashFile
+		/// </summary>
+		/// <param name="hashes">
+		/// A <see cref="HASH_NAME"/>
+		/// The hash algorithms to use
+		/// </param>
+		/// <param name="hashFile">
+		/// A <see cref="System.String"/>
+		/// The file to write the hashes to
+		/// </param>
+		/// <param name="filesToHash">
+		/// A <see cref="System.String[]"/>
+		/// The file to hash
+		/// </param>
+		private void writeHashesToFile(HASH_NAME[] hashes, string hashFile, string[] filesToHash)
+		{
+			try
+			{
+				//create file for writing
+				TextWriter writer = new StreamWriter(hashFile);
+				
+				for(int i=0; i<filesToHash.Length;i++)
+				{
+					//in this case if the file doesn't exist we don't want to even write anything out for it
+					if(File.Exists(filesToHash[i]))
+					{
+						//extract file name
+						String fName = "";
+
+						//depending on operating system extract the last part of the file name
+						if(filesToHash[i].LastIndexOf("/") != -1)
+						{
+							fName = filesToHash[i].Substring(filesToHash[i].LastIndexOf("/")+1);
+						}else if(filesToHash[i].LastIndexOf("\\") != -1)
+						{
+							fName = filesToHash[i].Substring(filesToHash[i].LastIndexOf("\\")+1);
+						}else
+						{
+							fName = "";
+						}
+						
+						//write the file name to the file
+						writer.WriteLine("File name: " + fName);
+	
+						//loop through all selected hash algorithms and write out their value
+						for(int j=0; j<hashes.Length;j++)
+						{
+							switch (hashes[j])
+							{
+								case HASH_NAME.MD5:
+									writer.WriteLine("MD5: " + computeHash(hashes[j],filesToHash[i]));
+									break;
+								case HASH_NAME.RIPEMD160:
+									writer.WriteLine("RIPEMD-160: " + computeHash(hashes[j],filesToHash[i]));
+									break;
+								case HASH_NAME.SHA1:
+									writer.WriteLine("SHA1: " + computeHash(hashes[j],filesToHash[i]));
+									break;
+								case HASH_NAME.SHA256:
+									writer.WriteLine("SHA256: " + computeHash(hashes[j],filesToHash[i]));
+									break;
+								case HASH_NAME.SHA384:
+									writer.WriteLine("SHA384: " + computeHash(hashes[j],filesToHash[i]));
+									break;
+								case HASH_NAME.SHA512:
+									writer.WriteLine("SHA512: " + computeHash(hashes[j],filesToHash[i]));
+									break;
+								default:
+									//show error message
+									MessageBox.Show("Invalid hash selection","Error!",MessageBoxButtons.OK);
+									break;
+							}
+						}
+					}
+					//if its not the last file print out a blank newline
+					if(i != filesToHash.Length-1)
+						writer.WriteLine("");
+				}
+				
+				//close file
+				writer.Close();
+
+			}catch(IOException)
+			{
+				//display error to user
+				MessageBox.Show("Cannot write to " + hashFile + ". Do you have permission to do so?","Error",MessageBoxButtons.OK);
+			}catch(Exception)
+			{
+				//display error to user
+				MessageBox.Show("An error has occured!","Error",MessageBoxButtons.OK);
+			}
+		}
+	}
+
+}

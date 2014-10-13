@@ -8,6 +8,7 @@
     <ProjectGuid>{27EF9094-8795-4878-9BC3-FC9D7390FE5B}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AssemblyName>HashVerifier</AssemblyName>
+    <Description>A graphical utility to generate and verify file hashes</Description>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -21,10 +22,11 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
-    <Optimize>false</Optimize>
+    <Optimize>true</Optimize>
     <OutputPath>bin\Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <GenerateDocumentation>true</GenerateDocumentation>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -39,5 +41,6 @@
   <ItemGroup>
     <Compile Include="src\HashVerifier.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="src\HashVerifierUI.cs" />
   </ItemGroup>
 </Project>
