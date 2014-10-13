@@ -1,0 +1,2 @@
+java -jar AdaptiveSWT swt.jar
+java -XX:+AggressiveOpts -XX:+UseParallelGC -jar HashVerifierApp
